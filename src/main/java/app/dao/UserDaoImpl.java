@@ -2,11 +2,14 @@ package app.dao;
 
 import app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+/*import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;*/
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository//не проксируются, объявление бинами @Bean
 public class UserDaoImpl implements UserDao {
@@ -45,6 +48,13 @@ public class UserDaoImpl implements UserDao {
         TypedQuery<User> query = entityManager.createQuery(
                 "from User u where u.login = :login ", User.class);
         query.setParameter("login", login);
+//        User user = query.getSingleResult();
+ /*       List<GrantedAuthority> authorities =
+                user.getAuthorityList()
+                        .stream()
+                        .map(e -> new SimpleGrantedAuthority(e.getAuthority()))
+                        .collect(Collectors.toList());*/
         return query.getSingleResult();
+//        user;
     }
 }

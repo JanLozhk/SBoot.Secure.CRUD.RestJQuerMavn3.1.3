@@ -5,8 +5,15 @@ import app.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -20,49 +27,13 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String helloPage() {
-        return "/mainpage";
-    }
-
     @GetMapping("/all")
-    public String getAllUsers(Model model) {
+    public String getAllUsers(Principal princip, Model model) {
 //        model.addAttribute("roles", userService.getAllRoles)
-
-        model.addAttribute("allUsers", userService.getAllUsers());
+        User user = userService.findByLogin(princip.getName());
+        model.addAttribute("authorizedUser", user);
         model.addAttribute("user", new User());
         return "users";
     }
 
-    @GetMapping("/{id}")
-    public String getEdit(Model model, @PathVariable Long id) {
-        User user = userService.findUserById(id);
-        System.out.println(user);
-        System.out.println("model" + model);
-        model.addAttribute("user", user);
-        return "/edit";
-    }
-
-    @GetMapping("/new")
-    public String openPageNew(@ModelAttribute ("user") User user){
-        return "/create";
-    }
-
-    @PostMapping
-    public String createNewUser(@ModelAttribute("user") User user){
-        userService.create(user);
-        return "redirect:/admin/all";
-    }
-
-    @PostMapping("/{id}")
-    public String postEdit(@ModelAttribute("user") User user) {
-        userService.update(user);
-        return "redirect:all";
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteUserById(@PathVariable Long id) {
-        userService.delete(id);
-        return "redirect:/admin/all"; // return "redirect: /all" не редиректится по RequesеMapping, даже по абсолютному пути
-    }
 }

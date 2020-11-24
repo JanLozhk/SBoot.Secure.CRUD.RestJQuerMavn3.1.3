@@ -1,6 +1,14 @@
 package app.model;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.util.List;
 
 @Entity
@@ -26,8 +34,10 @@ public class User {
    @Column(name = "password")
    private String password;
 
+   private String age;
 
-   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}/*, fetch = FetchType.EAGER*/)
+
+   @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH}/*, fetch = FetchType.EAGER*/)
    @JoinTable(
            name = "user_authority",
            joinColumns = { @JoinColumn(name = "user_id") },
@@ -44,7 +54,7 @@ public class User {
    public User() {
    }
 
-   public User(String firstName, String lastName, String email, String login, String password) {
+  /* public User(String firstName, String lastName, String email, String login, String password) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
@@ -61,6 +71,16 @@ public class User {
       this.authorityList = authorityList;
    }
 
+   public User(String firstName, String lastName, String email, String login, String password, String age, List<Authority> authorityList) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.email = email;
+      this.login = login;
+      this.password = password;
+      this.age = age;
+      this.authorityList = authorityList;
+   }
+
    public User(String firstName, String lastName, String email) {
       this.firstName = firstName;
       this.lastName = lastName;
@@ -71,6 +91,14 @@ public class User {
       this.id = id;
       this.firstName = firstName;
       this.lastName = lastName;
+   }*/
+
+   public String getAge() {
+      return age;
+   }
+
+   public void setAge(String age) {
+      this.age = age;
    }
 
    public Long getId() {

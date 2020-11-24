@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,8 +23,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void create(User user) {
-        Authority authority =  authorityDao.findByAuthority("USER");
-        user.setAuthorityList(Collections.singletonList(authority));
+        updateAuthorityList(user);
         userDao.create(user);
     }
 
@@ -35,14 +35,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(User user) {
-        User old = userDao.findUserById(user.getId());
-        old.setLogin(user.getLogin());
+    public void update(Long id, User user) {
+        User old = userDao.findUserById(id);
         old.setFirstName(user.getFirstName());
         old.setLastName(user.getLastName());
+        old.setAge(user.getAge());
         old.setEmail(user.getEmail());
+        old.setLogin(user.getLogin());
         old.setPassword(user.getPassword());
         old.setAuthorityList(user.getAuthorityList());
+        updateAuthorityList(old);
         userDao.update(old);
     }
 
@@ -62,5 +64,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByLogin(String login) {
         return userDao.findUserByLogin(login);
+    }
+
+    private void updateAuthorityList(User user) {
+        List<Authority> authorityList = new ArrayList<>();
+        for (Authority authority : user.getAuthorityList()) {
+            authorityList.add(authorityDao.findByAuthority(authority.getAuthority()));
+        }
+        user.setAuthorityList(authorityList);
     }
 }
