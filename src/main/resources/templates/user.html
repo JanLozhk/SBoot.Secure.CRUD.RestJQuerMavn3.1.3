@@ -8,19 +8,7 @@
     <title>USER</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!--    <style>
-            table {
-                width: 100%;
-                border: 4px double black;
-                border-collapse: collapse;
-            }
-            th {
-                text-align: left;
-                background: #eee8aa; /* Цвет фона ячеек */
-                padding: 5px; /* Поля вокруг содержимого ячеек */
-                border: 1px solid black; /* Граница вокруг ячеек */
-            }
-        </style>-->
+
 </head>
 <body>
 <div class="navbar navbar-dark bg-dark row container-fluid">
@@ -29,72 +17,9 @@
         <a class="navbar-brand">with roles:</a>
         <a class="navbar-brand" th:each="role: ${#authentication.authorities}" th:text="${role.authority}"/>
     </nav>
-    <!--<a th:href="@{/logout}">Logout</a>
-    <div>
-    &lt;!&ndash;    <table>&ndash;&gt;
 
-
-            <table th:object="${user}" >
-                <thead>
-                <h2 align="center">User List</h2>
-                <th>Id</th>
-                <th>Login</th>
-                <th>Name</th>
-                <th>Last name</th>
-                <th>Mail</th>
-                </thead> <tr>
-                    <tbody>
-    &lt;!&ndash;                <td><label for="id"></label></td>&ndash;&gt;
-                    <td><b th:text="*{id}" id="id"></b></td>
-    &lt;!&ndash;                <td><label for="login">Login</label></td>&ndash;&gt;
-                    <td><b th:text="*{login}" id="login"></b></td>
-    &lt;!&ndash;                <td><label for="name">First name</label></td>&ndash;&gt;
-                    <td><b th:text="*{firstName}" id="name"></b></td>
-    &lt;!&ndash;                <td><label for="SecondName">Second name</label></td>&ndash;&gt;
-                    <td><b th:text="*{lastName}" id="SecondName"></b></td>
-    &lt;!&ndash;                <td><label for="Email">E-Mail</label></td>&ndash;&gt;
-                    <td><b th:text="*{email}" id="Email"></b></td>
-                </tbody>
-                </tr>-->
     <a href="/logout" th:class="text-light">Logout</a>
 </div>
-<!--<div class="navbar navbar-dark navbar-fixed-left text-light bg-dark" th:align="left">
-
-    <div class="navbar text-light font-weight-bold"
-         th:utext= "${user.email}"></div>
-    <div class ="navbar html-editor-align-left" th:text="' with roles :'"></div>
-    <div class="navbar html-editor-align-left" th:each="authority : ${user.authorityList}"
-         th:text="${authority.getAuthority()}"></div>
-
-
-</div>-->
-<!--<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-2">
-            <br>
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <div>
-                        &lt;!&ndash;<a th:type="hiden" th:each="authority : ${user.authorityList}">
-                            <br> <tr href="/admin/all" th:text="${authority.getAuthority()}"></tr></a>&ndash;&gt;
-                        &lt;!&ndash;                     </>       <a href ="" th:attrappend="${authority.getAuthority()}=='ADMIN' ? '/admin/all' : '/user'"></a>&ndash;&gt;
-                <div sec:authorize="isAuthenticated()">AUTH
-&lt;!&ndash;  This content is only shown to authenticated users.&ndash;&gt;
-</div>
-<div sec:authorize="hasRole('ROLE_ADMIN')">ADMIN
-&lt;!&ndash;  This content is only shown to administrators.&ndash;&gt;
-</div>
-<div sec:authorize="hasRole('ROLE_USER')">USER
-&lt;!&ndash;  This content is only shown to users.&ndash;&gt;
-</div>
-                    </div>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/user" class="nav-link">User</a>
-                </li>
-            </ul>
-        </div>-->
 
 <div class="container-fluid">
     <div class="row">
@@ -103,8 +28,6 @@
                 <div role="tablist" sec:authorize="hasAuthority('ADMIN')">
                     <a hidden="true" class="nav-link active"
                        id="v-pills-admin-tab" data-toggle="pill" href="#spanAdminAll" role="tab" aria-controls="v-pills-admin" aria-selected="true" ></a>
-                    <!--                &lt;!&ndash;&ndash;&gt;class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">-->
-                    <!--  This content is only shown to administrators.th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"-->
                     <a href="/admin/all" id="spanAdminAll"  class="nav-link show">ADMIN</a>
                 </div>
                 <div role="tablist">
@@ -135,7 +58,6 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!--                                                 <th:block th:each="user : ${allUsers}">-->
                                     <tr>
                                         <td th:text="${user.getId()}"></td>
                                         <td th:text="${user.getFirstName()}"></td>
