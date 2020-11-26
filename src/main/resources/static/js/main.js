@@ -1,7 +1,13 @@
 jQuery(document).ready(function() {
-        $('#new-user-form-btn-save').on('click', function(event) { createUser(); });
+    $('#new-user-form-btn-save').on('click', function(event) { createUser(); });
     $('#modal-edit-btn-save').on('click', function(event) { updateUser(); });
-    updateUsers();
+    $('#spanAdminAll').on('click', function(event) { updateUsers(); });
+    $('#spanCurrUser').on('click', function(event) { drawCurrentUser(); });
+    if ($('#spanAdminAll')[0]) {
+        updateUsers();
+    } else {
+        drawCurrentUser();
+    }
 });
 
 /*
@@ -61,13 +67,13 @@ function openEditTab(id) {
     });
 }
 
-function getCurrentUser(id) {
+function drawCurrentUser() {
     $.ajax({
         url: '/admin/api/',
         type: 'get',
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data) { },
+        success: function(user) { redrawTable([user], false) },
         error: function() { showError('На сервере произошла ошибка'); }
     });
 }
@@ -100,7 +106,7 @@ function createUser() {
         dataType: 'json',
         contentType: 'application/json',
         success: function(data) {
-            redrawTable(data);
+            redrawTable(data, true);
             $('#list-tab').click();
             $('#new-user-form').trigger('reset');
         },
@@ -123,7 +129,7 @@ function updateUser() {
         dataType: 'json',
         contentType: 'application/json',
         success: function(data) {
-            redrawTable(data);
+            redrawTable(data, true);
             $('#modal-edit').modal('toggle');
         },
         error: function() { showError('На сервере произошла ошибка'); }
@@ -136,7 +142,8 @@ function deleteUser(id) {
         type: 'delete',
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data) { redrawTable(data); },
+        success: function(data) { redrawTable(data, true)}, //необязательно тчк
+        // $('#modal-delete')}.modale('reset'),
         error: function() { showError('На сервере произошла ошибка'); }
     });
 }
@@ -147,12 +154,12 @@ function updateUsers() {
         type: 'get',
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data) { redrawTable(data); },
+        success: function(data) { redrawTable(data, true); },
         error: function() { showError('На сервере произошла ошибка'); }
     });
 }
 
-function redrawTable(userList) {
+function redrawTable(userList, showButtons) {
     var $table = $('.table-users tbody');
     $table.empty();
     userList.forEach((user, index) => {
@@ -160,6 +167,7 @@ function redrawTable(userList) {
         var btnEdit = '<a class="btn btn-primary btn-edit" data-id="' + user.id + '">Edit</a>';
         var btnDelete = '<a class="btn btn-danger btn-delete" data-id="' + user.id + '">Delete</a>';
         var buttons = btnEdit + ' ' + btnDelete;
+
         $table.append('<tr>' +
             '<td>' + user.id + '</td>' +
             '<td>' + user.firstName + '</td>' +
@@ -168,12 +176,33 @@ function redrawTable(userList) {
             '<td>' + user.age + '</td>' +
             '<td>' + user.email + '</td>' +
             '<td>' + authorities + '</td>' +
-            '<td>' + buttons + '</td>' +
+            '<td>' + (showButtons ? buttons : '') + '</td>' +
             '</tr>');
     });
     $('.btn-delete').on('click', function(event) { deleteUser( event.currentTarget.getAttribute('data-id')); });
     $('.btn-edit').on('click',   function(event) { openEditTab(event.currentTarget.getAttribute('data-id')); });
 }
+
+/*function redrawTableForOneUser(user) {
+    var $table = $('.table-users tbody');
+    $table.empty();
+    var authorities = user.authorityList.map(function(a) { return a.authority; }).join('<br/>');
+    /!*var btnEdit = '<a class="btn btn-primary btn-edit" data-id="' + user.id + '">Edit</a>';
+    var btnDelete = '<a class="btn btn-danger btn-delete" data-id="' + user.id + '">Delete</a>';
+    var buttons = btnEdit + ' ' + btnDelete;*!/
+    $table.append('<tr>' +
+        '<td>' + user.id + '</td>' +
+        '<td>' + user.firstName + '</td>' +
+        '<td>' + user.lastName + '</td>' +
+        '<td>' + user.login + '</td>' +
+        '<td>' + user.age + '</td>' +
+        '<td>' + user.email + '</td>' +
+        '<td>' + authorities + '</td>' +
+        '<td></td>' +
+        '</tr>');*/
+    /*$('.btn-delete').on('click', function(event) { deleteUser( event.currentTarget.getAttribute('data-id')); });
+    $('.btn-edit').on('click',   function(event) { openEditTab(event.currentTarget.getAttribute('data-id')); });*/
+// }
 
 function validateNewUser(user) {
     if (!user.firstName) {

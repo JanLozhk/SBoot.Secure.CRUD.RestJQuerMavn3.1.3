@@ -30,10 +30,10 @@
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <a hidden="true" class="nav-link active"
                    id="v-pills-admin-tab" data-toggle="pill" href="#spanAdminAll" role="tab" aria-controls="v-pills-admin" aria-selected="true" ></a>
-                <a href="/admin/all" id="spanAdminAll"  class="nav-link show active">ADMIN</a>
+                <a id="spanAdminAll" sec:authorize="hasAuthority('ADMIN')" class="nav-link show active">ADMIN</a>
             </div>
                  <div sec:authorize="hasAuthority('USER')" class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                     <a href="/user" class="nav-link">User</a>
+                     <a id="spanCurrUser" class="nav-link">User</a>
 
                      <!--  This content is only shown to users.-->
                  </div>
