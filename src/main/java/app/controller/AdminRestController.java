@@ -34,8 +34,8 @@ public class AdminRestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<User> getCurrentUser() {
-        return ResponseEntity.ok(userService.findByLogin("admin"));
+    public ResponseEntity<User> getCurrentUser(@PathVariable String login) {
+        return ResponseEntity.ok(userService.findByLogin(login));
     }
 
     @GetMapping("/{id}")

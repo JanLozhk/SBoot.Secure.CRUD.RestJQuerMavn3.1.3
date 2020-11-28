@@ -29,7 +29,8 @@
         <div class="col-sm-2">
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <a hidden="true" class="nav-link active"
-                   id="v-pills-admin-tab" data-toggle="pill" href="#spanAdminAll" role="tab" aria-controls="v-pills-admin" aria-selected="true" ></a>
+                   id="v-pills-admin-tab" data-toggle="pill"
+                   role="tab" aria-controls="v-pills-admin" aria-selected="true" ></a><!--href="#spanAdminAll"-->
                 <a id="spanAdminAll" sec:authorize="hasAuthority('ADMIN')" class="nav-link show active">ADMIN</a>
             </div>
                  <div sec:authorize="hasAuthority('USER')" class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
@@ -81,7 +82,7 @@
                     <!-- </div>-->
 
                     <!--Edit Modal Form-->
-                    <div class="modal" th:id="${'editUser'+user.getId()}">
+        <!--            <div class="modal" th:id="${'editUser'+user.getId()}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -95,9 +96,9 @@
                                                   th:id="${'userEditForm' + user.getId()}" th:object="${user}">
                                                 <input type="hidden" name="id"
                                                        th:value="${user.getId()}">
-                                                <!--                                                                <p>123</p>-->
-                                                <!--<input type="hidden" name="password"
-                                                       th:value="${user.getPassword()}">-->
+                                                &lt;!&ndash;                                                                <p>123</p>&ndash;&gt;
+                                                &lt;!&ndash;<input type="hidden" name="password"
+                                                       th:value="${user.getPassword()}">&ndash;&gt;
                                                 <div class="form-group">
                                                     <label class="font-weight-bold"
                                                            for="showId">Id</label>
@@ -184,7 +185,7 @@
                         </div>
                     </div>
 
-                    <!--Delete Modal Form-->
+                    &lt;!&ndash;Delete Modal Form&ndash;&gt;
                     <div class="modal" th:id="${'deleteUser' + user.getId()}">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -286,7 +287,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <!--One User info-->
                     <div class="tab-pane fade" id="oneUser" role="tabpanel" aria-labelledby="list-tab">
@@ -311,7 +312,7 @@
                     </div>
                 </div>
 
-                <!--New User, panel Info-->
+                <!--New User, JQuery panel Info-->
                 <div class="tab-pane" id="newUser" role="tabpanel" aria-labelledby="newUser-tab">
                     <div class="card">
                         <div class="card-header">
@@ -421,7 +422,7 @@
     </div>
 </div>
 
-<!--Modal Edit -->
+<!--Modal Edit JQuery -->
 
 <div class="modal" id="modal-edit">
     <div class="modal-dialog">
@@ -439,15 +440,13 @@
                                    class="form-control">
                         </div>
                         <div class="form-group">
-                            <label class="font-weight-bold"
-                                   for="lastName">LastName</label>
+                            <label class="font-weight-bold">LastName</label>
                             <input type="text"
                                    name="lastName"
                                    class="form-control">
                         </div>
                         <div class="form-group">
-                            <label class="font-weight-bold"
-                                   for="showId">Age</label>
+                            <label class="font-weight-bold">Age</label>
                             <input type="text"
                                    name="age"
                                    class="form-control">
@@ -486,6 +485,78 @@
                 <a class="btn btn-success" id="modal-edit-btn-save">Save</a>
                 <button class="btn btn-info" data-dismiss="modal">Close</button>
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Delete Form-->
+<div class="modal" id="modal-delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <form class="col-sm-6" id="delete-user-form">
+                        <input type="hidden" name="id">
+                        <div class="form-group">
+                            <label class="font-weight-bold">FirstName</label>
+                            <input type="text"
+                                   name="firstName"
+                                   class="form-control"
+                                   readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">LastName</label>
+                            <input type="text"
+                                   name="lastName"
+                                   readonly
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Age</label>
+                            <input type="text"
+                                   name="age"
+                                   readonly
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Email</label>
+                            <input type="text"
+                                   name="email"
+                                   readonly
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Login</label>
+                            <input type="text"
+                                   name="login"
+                                   readonly
+                                   class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Password</label>
+                            <input type="text"
+                                   readonly
+                                   class="form-control"
+                                   name="password"
+                                   placeholder="password">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Role</label>
+                            <select readonly class="form-control" name="authorityList" multiple="multiple">
+                                <option>ADMIN</option>
+                                <option>USER</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="col-sm-3"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" id="modal-delete-btn-save">Delete</a>
+                <button class="btn btn-info" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
     $('#new-user-form-btn-save').on('click', function(event) { createUser(); });
     $('#modal-edit-btn-save').on('click', function(event) { updateUser(); });
+    $('#modal-delete-btn-save').on('click', function(event) { deleteUser(); });
     $('#spanAdminAll').on('click', function(event) { updateUsers(); });
     $('#spanCurrUser').on('click', function(event) { drawCurrentUser(); });
     if ($('#spanAdminAll')[0]) {
@@ -65,6 +66,23 @@ function openEditTab(id) {
         $('#edit-user-form [name=password]').val(user.password);
         $('#edit-user-form [name=authorityList]').val(user.authorityList?.map(function(a) { return a.authority; }));
     });
+}
+
+function openDeleteTab(id) {
+    $('#delete-user-form').trigger('reset');
+    $('#modal-delete').modal();
+    getUser(id, function(user) {
+        $('#delete-user-form [name=id]').val(user.id);
+        $('#delete-user-form [name=firstName]').val(user.firstName);
+        $('#delete-user-form [name=lastName]').val(user.lastName);
+        $('#delete-user-form [name=age]').val(user.age);
+        $('#delete-user-form [name=email]').val(user.email);
+        $('#delete-user-form [name=login]').val(user.login);
+        $('#delete-user-form [name=password]').val(user.password);
+        $('#delete-user-form [name=authorityList]').val(user.authorityList?.map(function(a) { return a.authority; }));
+    });
+    // $('#modal-delete-btn-save').on('click', function(event) { deleteUser($('#delete-user-form [name=id]').val(data.id)); });
+
 }
 
 function drawCurrentUser() {
@@ -136,14 +154,17 @@ function updateUser() {
     });
 }
 
-function deleteUser(id) {
+function deleteUser() {
+    var userData = $('#delete-user-form').jsonify();
     $.ajax({
-        url: '/admin/api/' + id,
+        url: '/admin/api/' + userData.id,
         type: 'delete',
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data) { redrawTable(data, true)}, //необязательно тчк
-        // $('#modal-delete')}.modale('reset'),
+        success: function(data) {
+            redrawTable(data, true); //необязательно тчк
+            $('#modal-delete').modal('toggle');
+        },
         error: function() { showError('На сервере произошла ошибка'); }
     });
 }
@@ -179,7 +200,7 @@ function redrawTable(userList, showButtons) {
             '<td>' + (showButtons ? buttons : '') + '</td>' +
             '</tr>');
     });
-    $('.btn-delete').on('click', function(event) { deleteUser( event.currentTarget.getAttribute('data-id')); });
+    $('.btn-delete').on('click', function(event) { openDeleteTab( event.currentTarget.getAttribute('data-id')); });
     $('.btn-edit').on('click',   function(event) { openEditTab(event.currentTarget.getAttribute('data-id')); });
 }
 
